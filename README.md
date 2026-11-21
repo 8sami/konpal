@@ -1,21 +1,9 @@
-# Next.js template
+# Konpal
 
-This is a Next.js template with shadcn/ui.
+Website of the youth-led tree planting non profit organization planting trees for a greener tomorrow and continuous charity.
 
-## Adding components
+Built with **Next.js** and **shadcn/ui**
 
-To add components to your app, run the following command:
+## Contributing
 
-```bash
-npx shadcn@latest add button
-```
-
-This will place the ui components in the `components` directory.
-
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
-```
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pull request. It covers issue creation and assignment, `issue/<short-description-of-issue>` branch naming, commit conventions, and PR requirements.
