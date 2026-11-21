@@ -1,17 +1,17 @@
 {
   "metadata": {
-    "title": "Konpal | Planting trees for a greener future",
-    "description": "Konpal is a youth-led nonprofit planting trees for a greener and more fruitful future through continuous charity.",
+    "title": "Konpal | Plant a tree. Grow hope.",
+    "description": "Konpal brings people together to plant trees with care and support a greener future through Sadaqah Jariyah.",
     "openGraphType": "website",
     "siteName": "Konpal"
   },
   "home": {
-    "title": "Project ready!",
-    "description": "You may now add components and start building.",
-    "buttonNote": "We’ve already added the button component for you.",
-    "buttonLabel": "Button",
-    "themeHint": "Press",
-    "themeHintSuffix": "to toggle dark mode",
-    "logoAlt": "Konpal"
+    "logoAlt": "Konpal",
+    "navigation": {
+      "purpose": "Our purpose",
+      "takePart": "Take part",
+      "plantations": "Plantations",
+      "questions": "Questions"
+    }
   }
 }

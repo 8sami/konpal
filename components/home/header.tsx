@@ -1,0 +1,102 @@
+"use client"
+
+import { ArrowUpRight, Menu, X } from "lucide-react"
+import Link from "next/link"
+import { useEffect, useState } from "react"
+
+export function Header({
+  labels,
+}: {
+  labels: {
+    purpose: string
+    takePart: string
+    plantations: string
+    questions: string
+  }
+}) {
+  const links = [
+    { label: labels.purpose, href: "#purpose" },
+    { label: labels.takePart, href: "#take-part" },
+    { label: labels.plantations, href: "#plantations" },
+    { label: labels.questions, href: "#questions" },
+  ]
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setMenuOpen(false)
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [])
+
+  useEffect(() => {
+    document.body.classList.toggle("menu-open", menuOpen)
+    return () => document.body.classList.remove("menu-open")
+  }, [menuOpen])
+
+  return (
+    <>
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
+      <header className="site-header">
+        <div className="header-inner container">
+          <nav aria-label="Primary navigation" className="desktop-nav">
+            {links.map((link) => (
+              <a className="nav-link" href={link.href} key={link.href}>
+                {link.label}
+              </a>
+            ))}
+          </nav>
+          <Link aria-label="Konpal home" className="wordmark" href="#top">
+            Konpal
+          </Link>
+          <a className="header-action" href="mailto:konpal.earth@gmail.com">
+            Plant with us <ArrowUpRight aria-hidden="true" size={16} />
+          </a>
+          <button
+            aria-controls="mobile-navigation"
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+            className="menu-toggle"
+            onClick={() => setMenuOpen((open) => !open)}
+            type="button"
+          >
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+      </header>
+      <nav
+        aria-hidden={!menuOpen}
+        className={`mobile-navigation${menuOpen ? "is-open" : ""}`}
+        id="mobile-navigation"
+        inert={!menuOpen}
+      >
+        <div className="mobile-navigation-links">
+          {links.map((link, index) => (
+            <a
+              href={link.href}
+              key={link.href}
+              onClick={() => setMenuOpen(false)}
+            >
+              <span aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              {link.label}
+              <ArrowUpRight aria-hidden="true" size={20} />
+            </a>
+          ))}
+          <a
+            className="mobile-contact"
+            href="mailto:konpal.earth@gmail.com"
+            onClick={() => setMenuOpen(false)}
+          >
+            Get in touch <ArrowUpRight aria-hidden="true" size={20} />
+          </a>
+        </div>
+      </nav>
+    </>
+  )
+}
