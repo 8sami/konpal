@@ -1,6 +1,7 @@
 "use client"
 
 import { ArrowUpRight, Menu, X } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -51,7 +52,21 @@ export function Header({
             ))}
           </nav>
           <Link aria-label="Konpal home" className="wordmark" href="#top">
-            Konpal
+            <Image
+              alt="Konpal"
+              className="logo-mark logo-mark-dark"
+              height={46}
+              src="/konpal-logo.png"
+              width={196}
+            />
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="logo-mark logo-mark-light"
+              height={46}
+              src="/konpal-logo-white.png"
+              width={196}
+            />
           </Link>
           <a className="header-action" href="mailto:konpal.earth@gmail.com">
             Plant with us <ArrowUpRight aria-hidden="true" size={16} />

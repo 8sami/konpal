@@ -237,11 +237,39 @@
 
 .wordmark,
 .footer-wordmark {
+  align-items: center;
   color: var(--forest);
-  font-size: 1.7rem;
-  font-weight: 900;
-  letter-spacing: -0.07em;
+  display: inline-flex;
   text-decoration: none;
+}
+
+.logo-mark {
+  height: auto;
+  width: clamp(7.5rem, 12vw, 10rem);
+}
+
+.logo-mark-light {
+  display: block;
+}
+
+.site-header .logo-mark-light {
+  display: none;
+}
+
+.dark .site-header .logo-mark-dark {
+  display: none;
+}
+
+.dark .site-header .logo-mark-light {
+  display: block;
+}
+
+.footer-wordmark .logo-mark {
+  width: clamp(9rem, 18vw, 15rem);
+}
+
+.site-header .wordmark {
+  justify-self: center;
 }
 
 .header-action {

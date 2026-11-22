@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react"
+import Image from "next/image"
 
 import { contactEmail } from "@/components/home/content"
 
@@ -7,7 +8,13 @@ export function FooterContent() {
     <div className="footer-inner container">
       <div className="footer-top">
         <a aria-label="Konpal home" className="footer-wordmark" href="#top">
-          Konpal
+          <Image
+            alt="Konpal"
+            className="logo-mark logo-mark-light"
+            height={60}
+            src="/konpal-logo-white.png"
+            width={256}
+          />
         </a>
         <p>green today, greener tomorrow</p>
       </div>

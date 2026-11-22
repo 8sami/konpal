@@ -40,11 +40,13 @@ export async function generateMetadata({
       siteName: dictionary.metadata.siteName,
       title: dictionary.metadata.title,
       description: dictionary.metadata.description,
+      images: ["/opengraph-image.png"],
     },
     twitter: {
       card: "summary_large_image",
       title: dictionary.metadata.title,
       description: dictionary.metadata.description,
+      images: ["/twitter-image.png"],
     },
   }
 }
