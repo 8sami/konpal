@@ -5,6 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
+import { UNDERLINE_PATH } from "./underline-link"
+
 export function Header({
   labels,
 }: {
@@ -47,7 +49,24 @@ export function Header({
           <nav aria-label="Primary navigation" className="desktop-nav">
             {links.map((link) => (
               <a className="nav-link" href={link.href} key={link.href}>
-                {link.label}
+                <span className="nav-link-label">{link.label}</span>
+                <svg
+                  aria-hidden="true"
+                  className="nav-link-stroke"
+                  preserveAspectRatio="none"
+                  viewBox="0 0 310 40"
+                >
+                  <path
+                    className="nav-link-path"
+                    d={UNDERLINE_PATH}
+                    fill="none"
+                    pathLength={100}
+                    stroke="currentColor"
+                    strokeDasharray={100}
+                    strokeLinecap="round"
+                    strokeWidth={10}
+                  />
+                </svg>
               </a>
             ))}
           </nav>

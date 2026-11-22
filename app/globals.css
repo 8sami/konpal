@@ -225,10 +225,29 @@
 .nav-link {
   min-height: 44px;
   display: inline-flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  text-decoration: none;
 }
 
-.nav-link:hover,
+.nav-link-stroke {
+  display: block;
+  height: 0.35rem;
+  margin-block-start: -0.15rem;
+  overflow: visible;
+  width: 100%;
+}
+
+.nav-link-path {
+  stroke-dashoffset: 100;
+  transition: stroke-dashoffset 420ms cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+.nav-link:hover .nav-link-path,
+.nav-link:focus-visible .nav-link-path {
+  stroke-dashoffset: 0;
+}
+
 .footer-bottom a:hover,
 .footer-socials a:hover {
   text-decoration: underline;
@@ -254,14 +273,6 @@
 
 .site-header .logo-mark-light {
   display: none;
-}
-
-.dark .site-header .logo-mark-dark {
-  display: none;
-}
-
-.dark .site-header .logo-mark-light {
-  display: block;
 }
 
 .footer-wordmark .logo-mark {
@@ -363,6 +374,7 @@ body.menu-open {
 
 .hero-copy {
   align-self: center;
+  animation: hero-rise-in 800ms var(--ease-out) both;
   max-width: 52rem;
   padding-block: 2.5rem;
   position: relative;
@@ -433,62 +445,383 @@ body.menu-open {
   transform: translateY(-2px);
 }
 
-.hero-mark {
-  align-items: center;
+.hero-stage {
+  /* Stage tunables: canvas, rings, sapling, entrance and hover. */
+  --stage-width: min(600px, 90vw);
+  --ring-color: color-mix(in oklab, var(--cream) 18%, transparent);
+  --ring-inner: 72%;
+  --glow-inner: color-mix(in oklab, var(--cream) 14%, transparent);
+  --glow-outer: color-mix(in oklab, var(--cream) 6%, transparent);
+  --plant-size: 72%;
+  --plant-bottom: 19%;
+  --plant-float: 6px;
+  --plant-float-duration: 6s;
+  --enter-duration: 700ms;
+  --enter-step: 100ms;
+  --hover-grow-duration: 900ms;
+  --hover-grow-scale: 1.12;
+  --leaf-sway-duration: 7s;
+  --leaf-sway-lift: 9px;
+  --leaf-sway-drift: 5px;
+  --leaf-sway-angle: 7deg;
+  --leaf-base-rotation: 42deg;
+  /* Accent positions, rotations, float distances and timings. */
+  --daisy-left: 74%;
+  --daisy-top: 12%;
+  --daisy-width: 14%;
+  --daisy-rotation: 10deg;
+  --daisy-float-duration: 6.2s;
+  --daisy-float-delay: -1.1s;
+  --daisy-bob: 8px;
+  --daisy-drift: 4px;
+  --anemone-left: 7%;
+  --anemone-top: 40%;
+  --anemone-width: 11%;
+  --anemone-rotation: -8deg;
+  --anemone-float-duration: 7.4s;
+  --anemone-float-delay: -2.6s;
+  --anemone-bob: 6px;
+  --anemone-drift: 3px;
+  --ranunculus-left: 88.5%;
+  --ranunculus-top: 58%;
+  --ranunculus-width: 9%;
+  --ranunculus-rotation: -15deg;
+  --ranunculus-float-duration: 5.3s;
+  --ranunculus-float-delay: -0.8s;
+  --ranunculus-bob: 10px;
+  --ranunculus-drift: 5px;
+  --leaf-left: 24%;
+  --leaf-top: 71.5%;
+  --leaf-width: 14%;
+  --leaf-two-left: 12%;
+  --leaf-two-top: 69%;
+  --leaf-two-width: 9%;
+  --leaf-two-rotation: 18deg;
+  --leaf-two-sway-duration: 8.5s;
+  --leaf-two-sway-delay: -2.4s;
+  --leaf-three-left: 84.5%;
+  --leaf-three-top: 1%;
+  --leaf-three-width: 8.2%;
+  --leaf-three-rotation: -28deg;
+  --leaf-three-sway-duration: 9.5s;
+  --leaf-three-sway-delay: -1.7s;
+  --leaf-four-left: 86.5%;
+  --leaf-four-top: 76.9%;
+  --leaf-four-width: 7.8%;
+  --leaf-four-rotation: 135deg;
+  --leaf-four-sway-duration: 7.8s;
+  --leaf-four-sway-delay: -3.2s;
   align-self: center;
   aspect-ratio: 1;
-  border: 1px solid color-mix(in oklab, var(--cream) 52%, var(--forest));
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
   justify-self: center;
-  transform: translateY(var(--parallax-y, 0));
-  width: min(31vw, 420px);
+  max-width: 100%;
+  position: relative;
+  width: var(--stage-width);
 }
 
-.hero-mark::before,
-.hero-mark::after {
-  border: 1px solid color-mix(in oklab, var(--cream) 40%, var(--forest));
-  border-radius: 50%;
-  content: "";
-  inset: 10%;
+.hero-stage-content {
+  inset: 0;
   position: absolute;
 }
 
-.hero-mark::after {
-  inset: 20%;
-}
-
-.hero-mark span {
-  color: var(--cream);
-  font-size: clamp(4rem, 9vw, 8rem);
-  font-weight: 800;
-  line-height: 1;
-}
-
-.hero-orbit {
-  border: 1px solid color-mix(in oklab, var(--cream) 16%, var(--forest));
+/* Static rings and a very soft light behind the sapling. */
+.stage-ring {
+  border: 1px solid var(--ring-color);
   border-radius: 50%;
   pointer-events: none;
   position: absolute;
 }
 
-.hero-orbit-one {
-  height: 42vw;
-  inset-block-start: -23vw;
-  inset-inline-end: -10vw;
-  width: 42vw;
+.stage-ring-outer {
+  inset: 0;
 }
 
-.hero-orbit-two {
-  height: 28vw;
-  inset-block-end: -21vw;
-  inset-inline-start: 35%;
-  width: 28vw;
+.stage-ring-inner {
+  inset: calc((100% - var(--ring-inner)) / 2);
+}
+
+.stage-glow {
+  background:
+    radial-gradient(circle at 50% 58%, var(--glow-inner), transparent 34%),
+    radial-gradient(circle at 50% 64%, var(--glow-outer), transparent 68%);
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.stage-plant {
+  bottom: var(--plant-bottom);
+  height: var(--plant-size);
+  left: calc((100% - var(--plant-size)) / 2);
+  position: absolute;
+  translate: calc(var(--mx, 0) * var(--parallax-plant, 0px))
+    calc(var(--my, 0) * var(--parallax-plant, 0px));
+  width: var(--plant-size);
+  z-index: 1;
+}
+
+.stage-plant .stage-enter {
+  animation: stage-fade var(--enter-duration) var(--ease-out) 0ms both;
+}
+
+.stage-plant-float {
+  animation: plant-float var(--plant-float-duration) ease-in-out infinite
+    alternate;
+  height: 100%;
+  width: 100%;
+}
+
+.stage-plant-image {
+  filter: drop-shadow(0 16px 18px rgba(0, 0, 0, 0.35));
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+/* Outer: position + parallax. Inner layers: entrance, float, sway, rotation. */
+.stage-accent {
+  aspect-ratio: 1;
+  position: absolute;
+  translate: calc(var(--mx, 0) * var(--parallax-depth, 0px))
+    calc(var(--my, 0) * var(--parallax-depth, 0px));
+  z-index: 2;
+}
+
+.stage-enter {
+  height: 100%;
+  width: 100%;
+}
+
+.stage-accent .stage-enter {
+  animation: stage-enter var(--enter-duration) var(--ease-out)
+    var(--enter-delay, 0ms) both;
+}
+
+.stage-float {
+  animation: accent-float var(--float-duration, 6s) ease-in-out
+    var(--float-delay, 0s) infinite alternate;
+  height: 100%;
+  width: 100%;
+}
+
+.stage-sway,
+.stage-rotate {
+  height: 100%;
+  width: 100%;
+}
+
+.stage-rotate {
+  transform: rotate(var(--base-rotation, 0deg)) scale(1);
+  transition: transform var(--hover-grow-duration) var(--ease-out);
+}
+
+.stage-accent-image {
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
+
+.stage-daisy {
+  --base-rotation: var(--daisy-rotation);
+  --bob: var(--daisy-bob);
+  --drift: var(--daisy-drift);
+  --enter-delay: calc(var(--enter-step) * 1);
+  --float-delay: var(--daisy-float-delay);
+  --float-duration: var(--daisy-float-duration);
+  --parallax-depth: var(--parallax-daisy, 12px);
+  left: var(--daisy-left);
+  top: var(--daisy-top);
+  width: var(--daisy-width);
+}
+
+.stage-anemone {
+  --base-rotation: var(--anemone-rotation);
+  --bob: var(--anemone-bob);
+  --drift: var(--anemone-drift);
+  --enter-delay: calc(var(--enter-step) * 2);
+  --float-delay: var(--anemone-float-delay);
+  --float-duration: var(--anemone-float-duration);
+  --parallax-depth: var(--parallax-anemone, 10px);
+  left: var(--anemone-left);
+  top: var(--anemone-top);
+  width: var(--anemone-width);
+}
+
+.stage-ranunculus {
+  --base-rotation: var(--ranunculus-rotation);
+  --bob: var(--ranunculus-bob);
+  --drift: var(--ranunculus-drift);
+  --enter-delay: calc(var(--enter-step) * 3);
+  --float-delay: var(--ranunculus-float-delay);
+  --float-duration: var(--ranunculus-float-duration);
+  --parallax-depth: var(--parallax-ranunculus, 14px);
+  left: var(--ranunculus-left);
+  top: var(--ranunculus-top);
+  width: var(--ranunculus-width);
+}
+
+.stage-leaf {
+  --base-rotation: var(--leaf-base-rotation);
+  --enter-delay: calc(var(--enter-step) * 4);
+  --parallax-depth: var(--parallax-leaf, 11px);
+  --sway-delay: 0s;
+  --sway-duration: var(--leaf-sway-duration);
+  left: var(--leaf-left);
+  top: var(--leaf-top);
+  width: var(--leaf-width);
+}
+
+.stage-leaf-two {
+  --base-rotation: var(--leaf-two-rotation);
+  --enter-delay: calc(var(--enter-step) * 5);
+  --parallax-depth: var(--parallax-leaf-two, 9px);
+  --sway-delay: var(--leaf-two-sway-delay);
+  --sway-duration: var(--leaf-two-sway-duration);
+  left: var(--leaf-two-left);
+  top: var(--leaf-two-top);
+  width: var(--leaf-two-width);
+}
+
+.stage-leaf-three {
+  --base-rotation: var(--leaf-three-rotation);
+  --enter-delay: calc(var(--enter-step) * 6);
+  --parallax-depth: var(--parallax-leaf-three, 8px);
+  --sway-delay: var(--leaf-three-sway-delay);
+  --sway-duration: var(--leaf-three-sway-duration);
+  left: var(--leaf-three-left);
+  top: var(--leaf-three-top);
+  width: var(--leaf-three-width);
+}
+
+.stage-leaf-four {
+  --base-rotation: var(--leaf-four-rotation);
+  --enter-delay: calc(var(--enter-step) * 7);
+  --parallax-depth: var(--parallax-leaf-four, 9px);
+  --sway-delay: var(--leaf-four-sway-delay);
+  --sway-duration: var(--leaf-four-sway-duration);
+  left: var(--leaf-four-left);
+  top: var(--leaf-four-top);
+  width: var(--leaf-four-width);
+}
+
+.stage-leaf .stage-float {
+  animation: none;
+}
+
+.stage-leaf .stage-sway {
+  animation: leaf-sway var(--sway-duration) ease-in-out var(--sway-delay)
+    infinite;
+}
+
+@keyframes stage-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes stage-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes plant-float {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(var(--plant-float) * -1));
+  }
+}
+
+@keyframes accent-float {
+  from {
+    transform: translate(calc(var(--drift, 4px) * -1), var(--bob, 8px));
+  }
+  to {
+    transform: translate(var(--drift, 4px), calc(var(--bob, 8px) * -1));
+  }
+}
+
+@keyframes leaf-sway {
+  0%,
+  100% {
+    transform: translate(calc(var(--leaf-sway-drift) * -1), 0)
+      rotate(calc(var(--leaf-sway-angle) * -1));
+  }
+  30% {
+    transform: translate(
+        calc(var(--leaf-sway-drift) * -0.4),
+        calc(var(--leaf-sway-lift) * -0.6)
+      )
+      rotate(calc(var(--leaf-sway-angle) * 0.2));
+  }
+  60% {
+    transform: translate(
+        var(--leaf-sway-drift),
+        calc(var(--leaf-sway-lift) * -1)
+      )
+      rotate(var(--leaf-sway-angle));
+  }
+  85% {
+    transform: translate(
+        calc(var(--leaf-sway-drift) * 0.3),
+        calc(var(--leaf-sway-lift) * -0.25)
+      )
+      rotate(calc(var(--leaf-sway-angle) * 0.1));
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stage-flower:hover .stage-rotate {
+    transform: rotate(var(--base-rotation, 0deg)) scale(var(--hover-grow-scale));
+  }
+}
+
+@keyframes hero-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hero-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.hero-stage[data-paused="true"] .stage-enter,
+.hero-stage[data-paused="true"] .stage-plant-float,
+.hero-stage[data-paused="true"] .stage-float,
+.hero-stage[data-paused="true"] .stage-sway,
+.hero-stage[data-paused="true"] .stage-rotate {
+  animation-play-state: paused;
+}
+
+.hero-stage[data-parallax="off"] .stage-plant,
+.hero-stage[data-parallax="off"] .stage-accent {
+  translate: 0 0;
 }
 
 .hero-caption {
   align-self: end;
+  animation: hero-fade-in 800ms var(--ease-out) 700ms both;
   color: color-mix(in oklab, var(--cream) 72%, var(--forest));
   font-size: 0.95rem;
   grid-column: 1 / -1;
@@ -527,6 +860,28 @@ body.menu-open {
 .faq-section,
 .contact-section {
   padding-block: var(--space-section);
+}
+
+/* Scoped stacks: the first panel pins below the navbar; the next scrolls over it. */
+.scroll-stack {
+  --stack-top: 76px;
+  position: relative;
+}
+
+.scroll-stack > :first-child {
+  position: sticky;
+  top: var(--stack-top);
+  z-index: 1;
+}
+
+.scroll-stack > :last-child {
+  position: relative;
+  z-index: 2;
+}
+
+/* Fills the values section's rounded corners with the marquee green. */
+.scroll-stack-marquee {
+  background: var(--sprout);
 }
 
 .goal-inner {
@@ -580,8 +935,9 @@ body.menu-open {
 }
 
 .progress-note {
-  border-block-start: 1px solid var(--color-rule);
-  color: var(--color-muted);
+  border-block-start: 1px solid
+    color-mix(in oklab, var(--forest) 18%, var(--ivory));
+  color: color-mix(in oklab, var(--charcoal) 68%, var(--ivory));
   margin-block-start: 2rem;
   padding-block-start: 1rem;
 }
@@ -590,23 +946,124 @@ body.menu-open {
   border-start-start-radius: 4rem;
   border-start-end-radius: 4rem;
   margin-block-start: -2rem;
+  overflow: hidden;
   position: relative;
   z-index: 2;
 }
 
-.purpose-inner {
-  display: grid;
-  gap: clamp(2.5rem, 7vw, 7rem);
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  position: relative;
+.purpose-section::after {
+  background: radial-gradient(
+    ellipse at 40% 60%,
+    color-mix(in oklab, var(--deep-pine) 35%, transparent),
+    transparent 72%
+  );
+  bottom: 0;
+  content: "";
+  height: clamp(70px, 10vw, 130px);
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  width: clamp(260px, 30vw, 470px);
+  z-index: 0;
 }
 
-.purpose-heading {
+.purpose-plant {
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  transform: translateY(22%);
+  width: clamp(300px, 32vw, 520px);
+  z-index: 1;
+}
+
+.purpose-sprout {
+  display: block;
+  height: auto;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+.purpose-drop {
+  --drop-delay: 0s;
+  --drop-duration: 7s;
+  --drop-lift: 10px;
+  --drop-size: 20px;
+  --drop-tilt: 7deg;
+  animation: water-drop-float var(--drop-duration) ease-in-out var(--drop-delay)
+    infinite alternate;
+  display: block;
+  opacity: 0.86;
+  position: absolute;
+  width: var(--drop-size);
+  will-change: transform;
+  z-index: 2;
+}
+
+.purpose-drop-image {
+  animation: water-drop-sway var(--drop-sway-duration, 4.5s) ease-in-out
+    var(--drop-delay) infinite;
+  aspect-ratio: 160 / 169;
+  display: block;
+  height: auto;
+  width: 100%;
+  will-change: transform;
+}
+
+.purpose-drop-one {
+  --drop-delay: -1.2s;
+  --drop-duration: 6.4s;
+  --drop-lift: 7px;
+  --drop-size: clamp(8px, 1vw, 12px);
+  --drop-sway-duration: 4.4s;
+  --drop-tilt: 6deg;
+  left: 45%;
+  top: -1.75rem;
+}
+
+.purpose-drop-two {
+  --drop-delay: -3.6s;
+  --drop-duration: 7.8s;
+  --drop-lift: 10px;
+  --drop-size: clamp(10px, 1.3vw, 16px);
+  --drop-sway-duration: 5.2s;
+  --drop-tilt: -8deg;
+  left: 53%;
+  top: -2.1rem;
+}
+
+@keyframes water-drop-float {
+  from {
+    transform: translate3d(0, var(--drop-lift), 0);
+  }
+  to {
+    transform: translate3d(0, calc(var(--drop-lift) * -1), 0);
+  }
+}
+
+@keyframes water-drop-sway {
+  0%,
+  100% {
+    transform: rotate(calc(var(--drop-tilt) * -1));
+  }
+  50% {
+    transform: rotate(var(--drop-tilt));
+  }
+}
+
+.purpose-inner {
+  align-items: start;
   display: grid;
-  gap: 1.5rem;
-  grid-column: 1 / -1;
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.8fr);
-  max-width: none;
+  gap: clamp(3rem, 7vw, 7rem);
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  position: relative;
+  z-index: 1;
+}
+
+.purpose-lead {
+  display: grid;
+  padding-block-end: clamp(9rem, 18vw, 15rem);
 }
 
 .purpose-heading h2,
@@ -618,77 +1075,48 @@ body.menu-open {
   line-height: 0.96;
 }
 
-.purpose-body {
-  align-items: start;
-  display: grid;
-  gap: clamp(2rem, 6vw, 6rem);
-  grid-column: 1 / -1;
-  grid-template-columns: minmax(14rem, 0.8fr) minmax(0, 1.2fr);
-}
-
-.purpose-wordmark {
-  align-content: start;
-  border-block-start: 1px solid
-    color-mix(in oklab, var(--cream) 45%, var(--forest));
-  display: grid;
-  gap: 1rem;
-  justify-items: start;
-  padding-block-start: 1.5rem;
-}
-
-.purpose-name {
-  color: color-mix(in oklab, var(--cream) 75%, var(--forest));
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  font-weight: 800;
-  letter-spacing: 0.03em;
+.purpose-heading h2 {
+  font-size: clamp(2.75rem, 6vw, 5.5rem);
+  max-width: 12ch;
 }
 
 .purpose-copy {
   border-block-start: 1px solid
     color-mix(in oklab, var(--cream) 45%, var(--forest));
   display: grid;
-  gap: 2rem;
-  padding-block-start: 1.5rem;
+  gap: 2.25rem;
+  padding-block-start: 1.75rem;
 }
 
-.purpose-body p {
-  color: color-mix(in oklab, var(--cream) 86%, var(--forest));
-  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
-  line-height: 1.55;
-}
-
-.purpose-body .purpose-definition {
+.purpose-definition {
   color: var(--cream);
-  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-size: clamp(1.4rem, 2.1vw, 1.9rem);
   font-weight: 700;
-  line-height: 1.3;
-  max-width: 34ch;
-}
-
-.urdu-word {
-  color: var(--cream);
-  font-size: clamp(2.5rem, 8vw, 6rem);
-  font-weight: 800;
-  line-height: 1;
-  white-space: nowrap;
+  line-height: 1.4;
+  margin: 0;
+  max-width: 30ch;
 }
 
 .purpose-principles {
   border-block-start: 1px solid
     color-mix(in oklab, var(--cream) 35%, var(--forest));
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   margin: 0;
 }
 
 .purpose-principles > div {
-  padding: 1.25rem 1rem 0 0;
+  align-items: baseline;
+  border-block-end: 1px solid
+    color-mix(in oklab, var(--cream) 20%, var(--forest));
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(9rem, 0.7fr) minmax(0, 1.3fr);
+  padding: 1rem 0;
 }
 
-.purpose-principles > div + div {
-  border-inline-start: 1px solid
-    color-mix(in oklab, var(--cream) 35%, var(--forest));
-  padding-inline-start: 1rem;
+.purpose-principles > div:last-child {
+  border-block-end: 0;
 }
 
 .purpose-principles dt {
@@ -754,7 +1182,7 @@ body.menu-open {
   max-width: 35ch;
 }
 
-.ways-column a,
+.ways-column a:not(.underline-link),
 .plantation-detail a {
   align-items: center;
   display: inline-flex;
@@ -766,30 +1194,86 @@ body.menu-open {
   text-decoration: none;
 }
 
-.ways-column a:hover,
+.ways-column a:not(.underline-link):hover,
 .plantation-detail a:hover {
   text-decoration: underline;
   text-underline-offset: 0.3em;
+}
+
+.underline-link {
+  color: inherit;
+  display: inline-flex;
+  flex-direction: column;
+  justify-self: start;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.underline-link-label {
+  align-items: center;
+  display: inline-flex;
+  font-size: 0.95rem;
+  font-weight: 800;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+
+.underline-link-stroke {
+  display: block;
+  height: 0.5rem;
+  margin-block-start: -0.1rem;
+  width: 100%;
+}
+
+.underline-link-svg {
+  display: block;
+  height: 100%;
+  overflow: visible;
+  width: 100%;
+}
+
+.underline-link-path {
+  transition: stroke-dashoffset 500ms cubic-bezier(0.45, 0, 0.55, 1);
 }
 
 .statement-section {
   padding-block: clamp(6rem, 12vw, 11rem);
 }
 
+.text-loop {
+  overflow: hidden;
+  width: 100%;
+}
+
+.text-loop-svg {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.text-loop-measure,
+.text-loop-copy {
+  font-family: var(--font-nunito);
+  user-select: none;
+}
+
+.text-loop-measure {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.text-loop-ribbon {
+  stroke: var(--cream);
+}
+
+.text-loop-copy {
+  fill: var(--forest);
+}
+
 .marquee-section {
   background: var(--sprout);
   color: var(--ivory);
-  padding: clamp(1.5rem, 4vw, 3.5rem) var(--space-gutter);
-}
-
-.marquee-section p {
-  font-size: clamp(1.75rem, 5vw, 4rem);
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  line-height: 1;
-  margin-inline: auto;
-  max-width: 1440px;
-  text-align: center;
+  padding-block: 0;
 }
 
 .statement-inner {
@@ -869,7 +1353,7 @@ body.menu-open {
 }
 
 .option-copy > span {
-  color: var(--color-muted);
+  color: color-mix(in oklab, var(--charcoal) 68%, var(--ivory));
   font-size: 0.95rem;
   line-height: 1.45;
   max-width: 44ch;
@@ -984,6 +1468,13 @@ body.menu-open {
   max-width: 16ch;
 }
 
+.faq-section {
+  align-content: start;
+  display: grid;
+  min-height: 100svh;
+  padding-block: clamp(3rem, 6vw, 6rem);
+}
+
 .faq-layout {
   display: grid;
   gap: clamp(3rem, 8vw, 8rem);
@@ -992,6 +1483,37 @@ body.menu-open {
 
 .faq-heading {
   align-self: start;
+}
+
+.faq-bouncy {
+  max-width: 46rem;
+}
+
+.faq-bouncy-item {
+  background: var(--forest);
+  color: var(--cream);
+}
+
+.faq-bouncy-trigger {
+  min-height: 76px;
+}
+
+.faq-bouncy-title {
+  color: var(--cream);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  font-weight: 800;
+  white-space: normal;
+}
+
+.faq-bouncy-chevron {
+  color: var(--cream);
+}
+
+.faq-bouncy-description {
+  color: color-mix(in oklab, var(--cream) 82%, var(--forest));
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 55ch;
 }
 
 .faq-list {
@@ -1078,9 +1600,73 @@ body.menu-open {
   border-start-start-radius: 4rem;
   border-start-end-radius: 4rem;
   margin-block-start: -2rem;
+  overflow: hidden;
   padding-block: clamp(6rem, 13vw, 12rem);
   position: relative;
   z-index: 3;
+}
+
+.contact-neem {
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: clamp(300px, 36vw, 620px);
+  z-index: 0;
+}
+
+.contact-leaf {
+  --enter-duration: 700ms;
+  --leaf-sway-angle: 11deg;
+  --leaf-sway-drift: 14px;
+  --leaf-sway-lift: 16px;
+  --sway-delay: 0s;
+  --sway-duration: 8s;
+  aspect-ratio: auto;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.contact-leaf .stage-float {
+  animation: none;
+}
+
+.contact-leaf .stage-sway {
+  animation: leaf-sway var(--sway-duration) ease-in-out var(--sway-delay)
+    infinite;
+}
+
+.contact-leaf-one {
+  --base-rotation: -32deg;
+  --sway-delay: -1.4s;
+  --sway-duration: 8.5s;
+  left: 58%;
+  top: 6%;
+  width: clamp(20px, 3.2vw, 48px);
+}
+
+.contact-leaf-three {
+  --base-rotation: 118deg;
+  --sway-delay: -0.8s;
+  --sway-duration: 7.8s;
+  left: 48%;
+  top: 42%;
+  width: clamp(14px, 2.1vw, 32px);
+}
+
+.contact-leaf-five {
+  --base-rotation: 64deg;
+  --sway-delay: -2.2s;
+  --sway-duration: 8.9s;
+  left: 66%;
+  top: 74%;
+  width: clamp(13px, 1.8vw, 28px);
+}
+
+.contact-inner {
+  position: relative;
+  z-index: 2;
 }
 
 .contact-inner > div {
@@ -1251,21 +1837,11 @@ body.menu-open {
   .hero-inner {
     grid-template-columns: minmax(0, 1.1fr) minmax(13rem, 0.8fr);
   }
-  .hero-mark {
-    width: min(34vw, 340px);
-  }
   .goal-inner {
     grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.8fr);
   }
   .purpose-inner {
     gap: 3.5rem;
-  }
-  .purpose-body {
-    grid-column: 1 / -1;
-    margin-inline-start: auto;
-  }
-  .purpose-note {
-    grid-row: 3;
   }
   .ways-intro,
   .plantation-head {
@@ -1286,6 +1862,9 @@ body.menu-open {
   .header-inner {
     grid-template-columns: 1fr auto;
     min-height: 68px;
+  }
+  .scroll-stack {
+    --stack-top: 68px;
   }
   .desktop-nav,
   .header-action {
@@ -1328,25 +1907,25 @@ body.menu-open {
     font-size: clamp(3.55rem, 14vw, 6rem);
     max-width: 9ch;
   }
-  .hero-mark {
-    justify-self: end;
-    margin-inline-end: 0.5rem;
-    width: min(52vw, 260px);
+  .hero-inner > .parallax {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 90%;
+  }
+  .hero-stage {
+    width: 100%;
+  }
+  .stage-ranunculus {
+    display: none;
+  }
+  .marquee-section {
+    padding-block: 2rem 3rem;
+  }
+  .text-loop-svg {
+    min-height: 190px;
   }
   .hero-caption {
     margin-block-start: 1rem;
-  }
-  .hero-orbit-one {
-    height: 85vw;
-    inset-block-start: -52vw;
-    inset-inline-end: -34vw;
-    width: 85vw;
-  }
-  .hero-orbit-two {
-    height: 50vw;
-    inset-block-end: -34vw;
-    inset-inline-start: 8%;
-    width: 50vw;
   }
   .goal-inner {
     align-items: start;
@@ -1364,27 +1943,33 @@ body.menu-open {
   }
   .purpose-inner {
     grid-template-columns: minmax(0, 1fr);
+    padding-block-end: clamp(9rem, 40vw, 14rem);
   }
-  .purpose-heading {
-    grid-column: 1;
+  .purpose-lead {
+    padding-block-end: 0;
   }
-  .purpose-body {
-    gap: 2rem;
-    grid-column: 1;
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .purpose-wordmark,
   .purpose-copy {
     padding-block-start: 1.25rem;
+  }
+  .purpose-plant {
+    width: clamp(200px, 58vw, 320px);
+  }
+  .purpose-section::after {
+    height: clamp(50px, 16vw, 80px);
+    width: clamp(180px, 50vw, 280px);
+  }
+  .contact-neem {
+    width: clamp(220px, 62vw, 380px);
   }
   .purpose-principles {
     grid-template-columns: minmax(0, 1fr);
   }
   .purpose-principles > div,
   .purpose-principles > div + div {
-    border-inline-start: 0;
     border-block-end: 1px solid
       color-mix(in oklab, var(--cream) 30%, var(--forest));
+    gap: 0.35rem;
+    grid-template-columns: minmax(0, 1fr);
     padding: 1rem 0;
   }
   .ways-columns {
@@ -1393,22 +1978,16 @@ body.menu-open {
   .ways-column {
     min-height: 280px;
   }
-  .purpose-heading {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .purpose-heading h2 {
     font-size: clamp(2.5rem, 10vw, 4rem);
     max-width: none;
     overflow-wrap: normal;
   }
-  .purpose-intro {
-    max-width: 40ch;
+  .purpose-definition {
+    font-size: clamp(1.3rem, 6vw, 1.75rem);
   }
   .values-heading h2 {
     font-size: clamp(2.75rem, 11vw, 4.5rem);
-  }
-  .urdu-word {
-    font-size: clamp(2.5rem, 12vw, 4rem);
   }
   .word-reveal {
     font-size: clamp(2.45rem, 10vw, 4.5rem);
@@ -1481,6 +2060,8 @@ body.menu-open {
   .button-primary,
   .button-secondary,
   .option-row,
+  .underline-link-path,
+  .nav-link-path,
   .faq-icons svg,
   .reveal {
     transition: none;
@@ -1493,11 +2074,40 @@ body.menu-open {
   .marquee-track {
     animation: none !important;
   }
+  .purpose-drop {
+    animation: none;
+    transform: none;
+  }
+  .purpose-drop-image {
+    animation: none;
+    transform: rotate(-5deg);
+  }
   .marquee-toggle {
     display: none;
   }
   .parallax {
     transform: none;
+  }
+  .hero-copy,
+  .stage-enter,
+  .stage-accent .stage-enter,
+  .stage-plant-float,
+  .stage-float,
+  .stage-sway,
+  .contact-leaf .stage-sway,
+  .stage-rotate,
+  .hero-caption {
+    animation: none;
+  }
+  .stage-plant,
+  .stage-accent {
+    translate: 0 0;
+  }
+  .stage-rotate {
+    transition: none;
+  }
+  .stage-flower:hover .stage-rotate {
+    transform: rotate(var(--base-rotation, 0deg)) scale(1);
   }
   .word-reveal span {
     opacity: 1 !important;
