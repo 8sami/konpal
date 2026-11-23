@@ -1,7 +1,9 @@
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react"
+import Image from "next/image"
 
 import { FaqSection } from "@/components/home/faq"
 import { FooterContent } from "@/components/home/footer"
+import { HeroMotion } from "@/components/home/hero-motion"
 import { Marquee } from "@/components/home/marquee"
 import { Header } from "@/components/home/header"
 import {
@@ -11,6 +13,7 @@ import {
   participationOptions,
 } from "@/components/home/content"
 import { StickyFooter } from "@/components/home/sticky-footer"
+import { UnderlineLink } from "@/components/home/underline-link"
 import {
   CountUp,
   Parallax,
@@ -21,6 +24,59 @@ import {
 function participationLink(title: string) {
   return `mailto:${contactEmail}?subject=${encodeURIComponent(title)}`
 }
+
+// Positions, sizes and timings live in the `.hero-stage` variables in globals.css.
+const heroAccents = [
+  {
+    className: "stage-daisy stage-flower",
+    src: "/daisy.webp",
+    width: 1795,
+    height: 1799,
+  },
+  {
+    className: "stage-anemone stage-flower",
+    src: "/anemone.webp",
+    width: 1761,
+    height: 1795,
+  },
+  {
+    className: "stage-ranunculus stage-flower",
+    src: "/ranunculus.webp",
+    width: 1681,
+    height: 1700,
+  },
+  {
+    className: "stage-leaf",
+    src: "/leaf.webp",
+    width: 1251,
+    height: 1610,
+  },
+  {
+    className: "stage-leaf stage-leaf-two",
+    src: "/leaf.webp",
+    width: 1251,
+    height: 1610,
+  },
+  {
+    className: "stage-leaf stage-leaf-three",
+    src: "/leaf.webp",
+    width: 1251,
+    height: 1610,
+  },
+  {
+    className: "stage-leaf stage-leaf-four",
+    src: "/leaf.webp",
+    width: 1251,
+    height: 1610,
+  },
+] as const
+
+// Leaves drift away from the neem tree in the contact section.
+const contactLeaves = [
+  "contact-leaf-one",
+  "contact-leaf-three",
+  "contact-leaf-five",
+] as const
 
 export function HomePage({
   navigation,
@@ -37,8 +93,6 @@ export function HomePage({
       <Header labels={navigation} />
       <main id="main-content">
         <section className="hero-section" aria-labelledby="hero-title">
-          <div className="hero-orbit hero-orbit-one" aria-hidden="true" />
-          <div className="hero-orbit hero-orbit-two" aria-hidden="true" />
           <div className="hero-inner container">
             <div className="hero-copy">
               <h1 id="hero-title">Plant a tree. Grow hope.</h1>
@@ -59,62 +113,130 @@ export function HomePage({
               </div>
             </div>
             <Parallax>
-              <div className="hero-mark" aria-hidden="true">
-                <span>کونپل</span>
-              </div>
+              <HeroMotion>
+                <div className="hero-stage-content" aria-hidden="true">
+                  <div className="stage-ring stage-ring-outer" />
+                  <div className="stage-ring stage-ring-inner" />
+                  <div className="stage-glow" />
+
+                  <div className="stage-plant">
+                    <div className="stage-enter">
+                      <div className="stage-plant-float">
+                        <Image
+                          alt=""
+                          className="stage-plant-image"
+                          fetchPriority="high"
+                          height={1365}
+                          loading="eager"
+                          sizes="(max-width: 48rem) 62vw, 42vw"
+                          src="/sapling.webp"
+                          width={649}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Position → entrance → float → sway → rotation, kept separate. */}
+                  {heroAccents.map((accent) => (
+                    <div
+                      className={`stage-accent ${accent.className}`}
+                      key={accent.className}
+                    >
+                      <div className="stage-enter">
+                        <div className="stage-float">
+                          <div className="stage-sway">
+                            <div className="stage-rotate">
+                              <Image
+                                alt=""
+                                className="stage-accent-image"
+                                height={accent.height}
+                                sizes="(max-width: 48rem) 12vw, 8vw"
+                                src={accent.src}
+                                width={accent.width}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </HeroMotion>
             </Parallax>
             <p className="hero-caption">green today, greener tomorrow</p>
           </div>
         </section>
 
-        <section
-          aria-labelledby="goal-title"
-          className="goal-section section-paper"
-        >
-          <div className="goal-inner container">
-            <div className="goal-copy reveal">
-              <h2 id="goal-title">Plant 10,000 trees with care.</h2>
-              <p className="lead">
-                Each tree is planted as Sadaqah Jariyah, for a greener future.
-              </p>
-            </div>
-            <div className="goal-figure reveal">
-              <p className="goal-number">
-                <CountUp value={TREE_GOAL} />
-              </p>
-              <p className="goal-caption">trees we hope to plant</p>
-              <div className="progress-note" aria-live="polite">
-                {PLANTED_TREES === null ? (
-                  <p>Planted-to-date progress will be shared when verified.</p>
-                ) : (
-                  <p>
-                    {PLANTED_TREES.toLocaleString("en")} trees planted so far.
-                  </p>
-                )}
+        <div className="scroll-stack">
+          <section
+            aria-labelledby="goal-title"
+            className="goal-section section-paper"
+          >
+            <div className="goal-inner container">
+              <div className="goal-copy reveal">
+                <h2 id="goal-title">Plant 10,000 trees with care.</h2>
+                <p className="lead">
+                  Each tree is planted as Sadaqah Jariyah, for a greener future.
+                </p>
+              </div>
+              <div className="goal-figure reveal">
+                <p className="goal-number">
+                  <CountUp value={TREE_GOAL} />
+                </p>
+                <p className="goal-caption">trees we hope to plant</p>
+                <div className="progress-note" aria-live="polite">
+                  {PLANTED_TREES === null ? (
+                    <p>
+                      Planted-to-date progress will be shared when verified.
+                    </p>
+                  ) : (
+                    <p>
+                      {PLANTED_TREES.toLocaleString("en")} trees planted so far.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section
-          aria-labelledby="purpose-title"
-          className="purpose-section section-forest"
-          id="purpose"
-        >
-          <div className="purpose-inner container">
-            <Reveal className="purpose-heading">
-              <h2 id="purpose-title">A fresh sprout.</h2>
-              <p className="purpose-intro">
-                We plant trees in hope for a greener future, choosing places
-                where each tree can be cared for and protected.
-              </p>
-            </Reveal>
-            <div className="purpose-body">
-              <div className="purpose-wordmark">
-                <span className="urdu-word" lang="ur" dir="rtl">
-                  کونپل
-                </span>
-                <span className="purpose-name">Konpal</span>
+          <section
+            aria-labelledby="purpose-title"
+            className="purpose-section section-forest"
+            id="purpose"
+          >
+            <div aria-hidden="true" className="purpose-plant">
+              <Image
+                alt=""
+                className="purpose-sprout"
+                height={908}
+                sizes="(max-width: 48rem) 62vw, 34vw"
+                src="/sprout.webp"
+                width={1013}
+              />
+              <span className="purpose-drop purpose-drop-one">
+                <Image
+                  alt=""
+                  className="purpose-drop-image"
+                  height={169}
+                  src="/droplet.webp"
+                  width={160}
+                />
+              </span>
+              <span className="purpose-drop purpose-drop-two">
+                <Image
+                  alt=""
+                  className="purpose-drop-image"
+                  height={169}
+                  src="/droplet.webp"
+                  width={160}
+                />
+              </span>
+            </div>
+            <div className="purpose-inner container">
+              <div className="purpose-lead">
+                <Reveal className="purpose-heading">
+                  <h2 id="purpose-title">A fresh sprout.</h2>
+                </Reveal>
               </div>
               <div className="purpose-copy">
                 <Reveal>
@@ -139,8 +261,8 @@ export function HomePage({
                 </dl>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
 
         <section
           aria-labelledby="ways-title"
@@ -158,10 +280,12 @@ export function HomePage({
               <article className="ways-column ways-column-dark reveal">
                 <h3>Fund trees and saplings</h3>
                 <p>Fund a tree or donate saplings for a planting effort.</p>
-                <a href={participationLink("Support tree planting")}>
+                <UnderlineLink
+                  href={participationLink("Support tree planting")}
+                >
                   Support a planting{" "}
                   <ArrowUpRight aria-hidden="true" size={18} />
-                </a>
+                </UnderlineLink>
               </article>
               <article
                 className="ways-column ways-column-light reveal"
@@ -169,12 +293,12 @@ export function HomePage({
               >
                 <h3>Plant together</h3>
                 <p>Volunteer, host a planting, or sponsor the work.</p>
-                <a
+                <UnderlineLink
                   href={`mailto:${contactEmail}?subject=Partner%20with%20Konpal`}
                 >
                   Explore partnership{" "}
                   <ArrowUpRight aria-hidden="true" size={18} />
-                </a>
+                </UnderlineLink>
               </article>
             </div>
           </div>
@@ -254,49 +378,86 @@ export function HomePage({
           </div>
         </section>
 
-        <Marquee />
+        <div className="scroll-stack scroll-stack-marquee">
+          <Marquee />
 
-        <section
-          aria-labelledby="values-title"
-          className="values-section section-forest"
-        >
-          <div className="values-inner container">
-            <Reveal className="values-heading">
-              <h2 id="values-title">What a tree can carry forward.</h2>
-            </Reveal>
-            <div className="values-grid">
+          <section
+            aria-labelledby="values-title"
+            className="values-section section-forest"
+          >
+            <div className="values-inner container">
+              <Reveal className="values-heading">
+                <h2 id="values-title">What a tree can carry forward.</h2>
+              </Reveal>
+              <div className="values-grid">
+                <Reveal>
+                  <p>Sadaqah Jariyah, a lasting act of giving.</p>
+                </Reveal>
+                <Reveal delay={70}>
+                  <p>A place chosen for care.</p>
+                </Reveal>
+                <Reveal delay={140}>
+                  <p>Open information about funding.</p>
+                </Reveal>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div className="scroll-stack">
+          <FaqSection />
+
+          <section
+            aria-labelledby="contact-title"
+            className="contact-section section-deep-pine"
+          >
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="contact-neem"
+              height={1735}
+              sizes="(max-width: 48rem) 70vw, 36vw"
+              src="/neemtree.webp"
+              width={1400}
+            />
+            {contactLeaves.map((leafClass) => (
+              <div
+                aria-hidden="true"
+                className={`stage-accent contact-leaf ${leafClass}`}
+                key={leafClass}
+              >
+                <div className="stage-enter">
+                  <div className="stage-float">
+                    <div className="stage-sway">
+                      <div className="stage-rotate">
+                        <Image
+                          alt=""
+                          className="stage-accent-image"
+                          height={1520}
+                          sizes="(max-width: 48rem) 10vw, 5vw"
+                          src="/neemleaf.webp"
+                          width={566}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div className="contact-inner container">
               <Reveal>
-                <p>Sadaqah Jariyah, a lasting act of giving.</p>
-              </Reveal>
-              <Reveal delay={70}>
-                <p>A place chosen for care.</p>
-              </Reveal>
-              <Reveal delay={140}>
-                <p>Open information about funding.</p>
+                <h2 id="contact-title">Help put down the next root.</h2>
+                <p className="lead">Tell us how you would like to take part.</p>
+                <a
+                  className="button-primary button-cream"
+                  href={`mailto:${contactEmail}?subject=Take%20part%20with%20Konpal`}
+                >
+                  Get in touch <ArrowUpRight aria-hidden="true" size={18} />
+                </a>
               </Reveal>
             </div>
-          </div>
-        </section>
-
-        <FaqSection />
-
-        <section
-          aria-labelledby="contact-title"
-          className="contact-section section-deep-pine"
-        >
-          <div className="contact-inner container">
-            <Reveal>
-              <h2 id="contact-title">Help put down the next root.</h2>
-              <p className="lead">Tell us how you would like to take part.</p>
-              <a
-                className="button-primary button-cream"
-                href={`mailto:${contactEmail}?subject=Take%20part%20with%20Konpal`}
-              >
-                Get in touch <ArrowUpRight aria-hidden="true" size={18} />
-              </a>
-            </Reveal>
-          </div>
-        </section>
+          </section>
+        </div>
       </main>
       <StickyFooter>
         <FooterContent />
