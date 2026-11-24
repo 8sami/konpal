@@ -103,7 +103,13 @@ export function RevealWords({ text }: { text: string }) {
   )
 }
 
-export function CountUp({ value }: { value: number }) {
+export function CountUp({
+  value,
+  locale = "en",
+}: {
+  value: number
+  locale?: string
+}) {
   const ref = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
@@ -126,7 +132,7 @@ export function CountUp({ value }: { value: number }) {
           const progress = Math.min((now - start) / duration, 1)
           target.textContent = Math.round(
             value * (1 - (1 - progress) ** 4)
-          ).toLocaleString("en")
+          ).toLocaleString(locale)
           if (progress < 1) requestAnimationFrame(tick)
         }
 
@@ -138,11 +144,11 @@ export function CountUp({ value }: { value: number }) {
 
     observer.observe(element)
     return () => observer.disconnect()
-  }, [value])
+  }, [value, locale])
 
   return (
     <span className="num" ref={ref}>
-      {value.toLocaleString("en")}
+      {value.toLocaleString(locale)}
     </span>
   )
 }

@@ -3,15 +3,165 @@
     "title": "Konpal | Plant a tree. Grow hope.",
     "description": "Konpal brings people together to plant trees with care and support a greener future through Sadaqah Jariyah.",
     "openGraphType": "website",
-    "siteName": "Konpal"
+    "siteName": "Konpal",
+    "openGraphImageAlt": "Konpal green leaf wordmark on an ivory background"
+  },
+  "common": {
+    "logoAlt": "Konpal",
+    "homeLabel": "Konpal home",
+    "skipToContent": "Skip to content",
+    "primaryNavigation": "Primary navigation",
+    "openNavigation": "Open navigation",
+    "closeNavigation": "Close navigation",
+    "tagline": "green today, greener tomorrow",
+    "getInTouch": "Get in touch"
+  },
+  "header": {
+    "plantWithUs": "Plant with us"
+  },
+  "footer": {
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "copyright": "© {year} Konpal"
   },
   "home": {
-    "logoAlt": "Konpal",
     "navigation": {
       "purpose": "Our purpose",
       "takePart": "Take part",
       "plantations": "Plantations",
       "questions": "Questions"
+    },
+    "hero": {
+      "title": "Plant a tree. Grow hope.",
+      "description": "A tree planted with care can keep giving, long after planting day.",
+      "primaryCta": "Fund a tree",
+      "primarySubject": "Fund a tree",
+      "secondaryCta": "Discover Konpal"
+    },
+    "goal": {
+      "title": "Plant {count} trees with care.",
+      "lead": "Each tree is planted as Sadaqah Jariyah, for a greener future.",
+      "caption": "trees we hope to plant",
+      "progressPending": "Planted-to-date progress will be shared when verified.",
+      "progressPlanted": "{count} trees planted so far."
+    },
+    "purpose": {
+      "title": "A fresh sprout.",
+      "definition": "Konpal is the Urdu word for a fresh sprout, the first tender leaf that pushes up out of the soil.",
+      "principles": [
+        {
+          "title": "Planted with care",
+          "description": "We choose places where trees can be cared for."
+        },
+        {
+          "title": "Sadaqah Jariyah",
+          "description": "A lasting act of giving for a greener future."
+        },
+        {
+          "title": "Open about funding",
+          "description": "Transparency is part of the work."
+        }
+      ]
+    },
+    "ways": {
+      "title": "Choose how to help.",
+      "lead": "Fund a tree, volunteer, or partner with Konpal.",
+      "cards": [
+        {
+          "title": "Fund trees and saplings",
+          "description": "Fund a tree or donate saplings for a planting effort.",
+          "cta": "Support a planting",
+          "subject": "Support tree planting"
+        },
+        {
+          "title": "Plant together",
+          "description": "Volunteer, host a planting, or sponsor the work.",
+          "cta": "Explore partnership",
+          "subject": "Partner with Konpal"
+        }
+      ]
+    },
+    "statement": {
+      "ariaLabel": "Konpal's planting principles",
+      "text": "A tree is a promise to care for what we plant, and to be open about how it grows.",
+      "signoff": "Care in the ground. Transparency along the way."
+    },
+    "options": {
+      "title": "Ways to take part.",
+      "lead": "Start with the part you can play.",
+      "items": [
+        {
+          "title": "Fund a tree",
+          "description": "Support a tree and the care that helps it take root."
+        },
+        {
+          "title": "Donate saplings",
+          "description": "Give young trees a place to begin growing."
+        },
+        {
+          "title": "Sponsor the work",
+          "description": "Support through a brand, merchandise, or CSR partnership."
+        },
+        {
+          "title": "Volunteer",
+          "description": "Join a planting effort with a volunteer group."
+        },
+        {
+          "title": "Host a plantation",
+          "description": "Bring a local group together to plant with Konpal’s support."
+        },
+        {
+          "title": "Partner with Konpal",
+          "description": "Talk with us about a corporate partnership."
+        }
+      ]
+    },
+    "plantation": {
+      "title": "The first sponsored plantation.",
+      "lead": "Nathiagali was Konpal’s first sponsored remote plantation.",
+      "body": "Volunteer groups plant in different cities with Konpal’s support.",
+      "cta": "Email Konpal",
+      "subject": "Ask about the Nathiagali plantation"
+    },
+    "values": {
+      "title": "What a tree can carry forward.",
+      "items": [
+        "Sadaqah Jariyah, a lasting act of giving.",
+        "A place chosen for care.",
+        "Open information about funding."
+      ]
+    },
+    "contact": {
+      "title": "Help put down the next root.",
+      "lead": "Tell us how you would like to take part.",
+      "cta": "Get in touch",
+      "subject": "Take part with Konpal"
+    },
+    "faq": {
+      "title": "Questions about planting",
+      "lead": "Clear answers about taking part and planting with care.",
+      "items": [
+        {
+          "question": "What does Konpal mean?",
+          "answer": "Konpal is the Urdu word for a fresh sprout, the first tender leaf that pushes up out of the soil."
+        },
+        {
+          "question": "Where does Konpal plant trees?",
+          "answer": "Konpal supports planting in different places through volunteer groups. Each plantation is chosen where trees can be cared for and kept safe from harm."
+        },
+        {
+          "question": "How can I take part?",
+          "answer": "You can fund a tree, donate saplings, volunteer, host a remote plantation, or discuss sponsorship and a corporate or CSR partnership."
+        },
+        {
+          "question": "How does Konpal share progress?",
+          "answer": "Transparency, including about funding, is a core value. Contact Konpal for current progress and funding information."
+        }
+      ]
+    },
+    "marquee": {
+      "ariaLabel": "Konpal tagline",
+      "text": "greenToday, greenerTomorrow"
     }
   }
 }

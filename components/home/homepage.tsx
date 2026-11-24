@@ -2,11 +2,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
-import {
-  PLANTED_TREES,
-  TREE_GOAL,
-  participationOptions,
-} from "@/components/home/content"
+import { PLANTED_TREES, TREE_GOAL } from "@/components/home/content"
 import { FaqSection } from "@/components/home/faq"
 import { HeroMotion } from "@/components/home/hero-motion"
 import { Marquee } from "@/components/home/marquee"
@@ -19,10 +15,17 @@ import {
   RevealWords,
 } from "@/components/motion/reveals"
 import { UnderlineLink } from "@/components/motion/underline-link"
+import { formatMessage } from "@/i18n/format"
+import type {
+  CommonDictionary,
+  FooterDictionary,
+  HeaderDictionary,
+  HomeDictionary,
+} from "@/i18n/types"
 import { contactEmail } from "@/lib/site"
 
-function participationLink(title: string) {
-  return `mailto:${contactEmail}?subject=${encodeURIComponent(title)}`
+function participationLink(subject: string) {
+  return `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}`
 }
 
 // Positions, sizes and timings live in the `.hero-stage` variables in globals.css.
@@ -79,36 +82,38 @@ const contactLeaves = [
 ] as const
 
 export function HomePage({
-  navigation,
+  common,
+  content,
+  footer,
+  header,
+  locale,
 }: {
-  navigation: {
-    purpose: string
-    takePart: string
-    plantations: string
-    questions: string
-  }
+  common: CommonDictionary
+  content: HomeDictionary
+  footer: FooterDictionary
+  header: HeaderDictionary
+  locale: string
 }) {
   return (
     <div className="marketing-site" id="top">
-      <Header labels={navigation} />
+      <Header common={common} copy={header} navigation={content.navigation} />
       <main id="main-content">
         <section className="hero-section" aria-labelledby="hero-title">
           <div className="hero-inner container">
             <div className="hero-copy">
-              <h1 id="hero-title">Plant a tree. Grow hope.</h1>
-              <p className="hero-description">
-                A tree planted with care can keep giving, long after planting
-                day.
-              </p>
+              <h1 id="hero-title">{content.hero.title}</h1>
+              <p className="hero-description">{content.hero.description}</p>
               <div className="hero-actions">
                 <a
                   className="button-primary"
-                  href={`mailto:${contactEmail}?subject=Fund%20a%20tree`}
+                  href={participationLink(content.hero.primarySubject)}
                 >
-                  Fund a tree <ArrowUpRight aria-hidden="true" size={18} />
+                  {content.hero.primaryCta}{" "}
+                  <ArrowUpRight aria-hidden="true" size={18} />
                 </a>
                 <Link className="button-secondary" href="#purpose">
-                  Discover Konpal <ArrowDown aria-hidden="true" size={16} />
+                  {content.hero.secondaryCta}{" "}
+                  <ArrowDown aria-hidden="true" size={16} />
                 </Link>
               </div>
             </div>
@@ -163,7 +168,7 @@ export function HomePage({
                 </div>
               </HeroMotion>
             </Parallax>
-            <p className="hero-caption">green today, greener tomorrow</p>
+            <p className="hero-caption">{common.tagline}</p>
           </div>
         </section>
 
@@ -174,24 +179,26 @@ export function HomePage({
           >
             <div className="goal-inner container">
               <div className="goal-copy reveal">
-                <h2 id="goal-title">Plant 10,000 trees with care.</h2>
-                <p className="lead">
-                  Each tree is planted as Sadaqah Jariyah, for a greener future.
-                </p>
+                <h2 id="goal-title">
+                  {formatMessage(content.goal.title, {
+                    count: TREE_GOAL.toLocaleString(locale),
+                  })}
+                </h2>
+                <p className="lead">{content.goal.lead}</p>
               </div>
               <div className="goal-figure reveal">
                 <p className="goal-number">
-                  <CountUp value={TREE_GOAL} />
+                  <CountUp locale={locale} value={TREE_GOAL} />
                 </p>
-                <p className="goal-caption">trees we hope to plant</p>
+                <p className="goal-caption">{content.goal.caption}</p>
                 <div className="progress-note" aria-live="polite">
                   {PLANTED_TREES === null ? (
-                    <p>
-                      Planted-to-date progress will be shared when verified.
-                    </p>
+                    <p>{content.goal.progressPending}</p>
                   ) : (
                     <p>
-                      {PLANTED_TREES.toLocaleString("en")} trees planted so far.
+                      {formatMessage(content.goal.progressPlanted, {
+                        count: PLANTED_TREES.toLocaleString(locale),
+                      })}
                     </p>
                   )}
                 </div>
@@ -235,29 +242,22 @@ export function HomePage({
             <div className="purpose-inner container">
               <div className="purpose-lead">
                 <Reveal className="purpose-heading">
-                  <h2 id="purpose-title">A fresh sprout.</h2>
+                  <h2 id="purpose-title">{content.purpose.title}</h2>
                 </Reveal>
               </div>
               <div className="purpose-copy">
                 <Reveal>
                   <p className="purpose-definition">
-                    Konpal is the Urdu word for a fresh sprout, the first tender
-                    leaf that pushes up out of the soil.
+                    {content.purpose.definition}
                   </p>
                 </Reveal>
                 <dl className="purpose-principles">
-                  <div>
-                    <dt>Planted with care</dt>
-                    <dd>We choose places where trees can be cared for.</dd>
-                  </div>
-                  <div>
-                    <dt>Sadaqah Jariyah</dt>
-                    <dd>A lasting act of giving for a greener future.</dd>
-                  </div>
-                  <div>
-                    <dt>Open about funding</dt>
-                    <dd>Transparency is part of the work.</dd>
-                  </div>
+                  {content.purpose.principles.map((principle) => (
+                    <div key={principle.title}>
+                      <dt>{principle.title}</dt>
+                      <dd>{principle.description}</dd>
+                    </div>
+                  ))}
                 </dl>
               </div>
             </div>
@@ -271,48 +271,40 @@ export function HomePage({
         >
           <div className="container">
             <div className="ways-intro reveal">
-              <h2 id="ways-title">Choose how to help.</h2>
-              <p className="lead">
-                Fund a tree, volunteer, or partner with Konpal.
-              </p>
+              <h2 id="ways-title">{content.ways.title}</h2>
+              <p className="lead">{content.ways.lead}</p>
             </div>
             <div className="ways-columns">
-              <article className="ways-column ways-column-dark reveal">
-                <h3>Fund trees and saplings</h3>
-                <p>Fund a tree or donate saplings for a planting effort.</p>
-                <UnderlineLink
-                  href={participationLink("Support tree planting")}
+              {content.ways.cards.map((card, index) => (
+                <article
+                  className={`ways-column reveal ${
+                    index === 0 ? "ways-column-dark" : "ways-column-light"
+                  }`}
+                  key={card.title}
+                  style={
+                    index === 1
+                      ? ({ "--reveal-delay": "100ms" } as React.CSSProperties)
+                      : undefined
+                  }
                 >
-                  Support a planting{" "}
-                  <ArrowUpRight aria-hidden="true" size={18} />
-                </UnderlineLink>
-              </article>
-              <article
-                className="ways-column ways-column-light reveal"
-                style={{ "--reveal-delay": "100ms" } as React.CSSProperties}
-              >
-                <h3>Plant together</h3>
-                <p>Volunteer, host a planting, or sponsor the work.</p>
-                <UnderlineLink
-                  href={`mailto:${contactEmail}?subject=Partner%20with%20Konpal`}
-                >
-                  Explore partnership{" "}
-                  <ArrowUpRight aria-hidden="true" size={18} />
-                </UnderlineLink>
-              </article>
+                  <h3>{card.title}</h3>
+                  <p>{card.description}</p>
+                  <UnderlineLink href={participationLink(card.subject)}>
+                    {card.cta} <ArrowUpRight aria-hidden="true" size={18} />
+                  </UnderlineLink>
+                </article>
+              ))}
             </div>
           </div>
         </section>
 
         <section
-          aria-label="Konpal's planting principles"
+          aria-label={content.statement.ariaLabel}
           className="statement-section section-sprout"
         >
           <div className="statement-inner container">
-            <RevealWords text="A tree is a promise to care for what we plant, and to be open about how it grows." />
-            <p className="statement-signoff">
-              Care in the ground. Transparency along the way.
-            </p>
+            <RevealWords text={content.statement.text} />
+            <p className="statement-signoff">{content.statement.signoff}</p>
           </div>
         </section>
 
@@ -322,11 +314,11 @@ export function HomePage({
         >
           <div className="options-layout container">
             <div className="options-heading reveal">
-              <h2 id="options-title">Ways to take part.</h2>
-              <p className="lead">Start with the part you can play.</p>
+              <h2 id="options-title">{content.options.title}</h2>
+              <p className="lead">{content.options.lead}</p>
             </div>
             <div className="options-list">
-              {participationOptions.map((option, index) => (
+              {content.options.items.map((option, index) => (
                 <a
                   className="option-row reveal"
                   href={participationLink(option.title)}
@@ -359,27 +351,21 @@ export function HomePage({
         >
           <div className="plantation-inner container">
             <Reveal className="plantation-head">
-              <h2 id="plantations-title">The first sponsored plantation.</h2>
-              <p className="lead">
-                Nathiagali was Konpal’s first sponsored remote plantation.
-              </p>
+              <h2 id="plantations-title">{content.plantation.title}</h2>
+              <p className="lead">{content.plantation.lead}</p>
             </Reveal>
             <div className="plantation-story reveal">
-              <p>
-                Volunteer groups plant in different cities with Konpal’s
-                support.
-              </p>
-              <a
-                href={`mailto:${contactEmail}?subject=Ask%20about%20the%20Nathiagali%20plantation`}
-              >
-                Email Konpal <ArrowUpRight aria-hidden="true" size={18} />
+              <p>{content.plantation.body}</p>
+              <a href={participationLink(content.plantation.subject)}>
+                {content.plantation.cta}{" "}
+                <ArrowUpRight aria-hidden="true" size={18} />
               </a>
             </div>
           </div>
         </section>
 
         <div className="scroll-stack scroll-stack-marquee">
-          <Marquee />
+          <Marquee copy={content.marquee} />
 
           <section
             aria-labelledby="values-title"
@@ -387,25 +373,21 @@ export function HomePage({
           >
             <div className="values-inner container">
               <Reveal className="values-heading">
-                <h2 id="values-title">What a tree can carry forward.</h2>
+                <h2 id="values-title">{content.values.title}</h2>
               </Reveal>
               <div className="values-grid">
-                <Reveal>
-                  <p>Sadaqah Jariyah, a lasting act of giving.</p>
-                </Reveal>
-                <Reveal delay={70}>
-                  <p>A place chosen for care.</p>
-                </Reveal>
-                <Reveal delay={140}>
-                  <p>Open information about funding.</p>
-                </Reveal>
+                {content.values.items.map((item, index) => (
+                  <Reveal delay={index * 70} key={item}>
+                    <p>{item}</p>
+                  </Reveal>
+                ))}
               </div>
             </div>
           </section>
         </div>
 
         <div className="scroll-stack">
-          <FaqSection />
+          <FaqSection copy={content.faq} />
 
           <section
             aria-labelledby="contact-title"
@@ -446,20 +428,21 @@ export function HomePage({
             ))}
             <div className="contact-inner container">
               <Reveal>
-                <h2 id="contact-title">Help put down the next root.</h2>
-                <p className="lead">Tell us how you would like to take part.</p>
+                <h2 id="contact-title">{content.contact.title}</h2>
+                <p className="lead">{content.contact.lead}</p>
                 <a
                   className="button-primary button-cream"
-                  href={`mailto:${contactEmail}?subject=Take%20part%20with%20Konpal`}
+                  href={participationLink(content.contact.subject)}
                 >
-                  Get in touch <ArrowUpRight aria-hidden="true" size={18} />
+                  {content.contact.cta}{" "}
+                  <ArrowUpRight aria-hidden="true" size={18} />
                 </a>
               </Reveal>
             </div>
           </section>
         </div>
       </main>
-      <Footer />
+      <Footer common={common} copy={footer} />
     </div>
   )
 }

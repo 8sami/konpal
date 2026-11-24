@@ -1,8 +1,8 @@
 import { BouncyAccordion } from "@/components/motion/bouncy-accordion"
-import { faqItems } from "@/components/home/content"
+import type { HomeDictionary } from "@/i18n/types"
 
-export function FaqSection() {
-  const items = faqItems.map((item, index) => ({
+export function FaqSection({ copy }: { copy: HomeDictionary["faq"] }) {
+  const items = copy.items.map((item, index) => ({
     id: index === 0 ? "meaning" : `question-${index}`,
     title: item.question,
     description: item.answer,
@@ -12,10 +12,8 @@ export function FaqSection() {
     <section className="faq-section section-paper" id="questions">
       <div className="faq-layout container">
         <div className="faq-heading reveal">
-          <h2>Questions about planting</h2>
-          <p className="lead">
-            Clear answers about taking part and planting with care.
-          </p>
+          <h2>{copy.title}</h2>
+          <p className="lead">{copy.lead}</p>
         </div>
         <BouncyAccordion
           className="faq-bouncy"
