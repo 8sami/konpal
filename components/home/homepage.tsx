@@ -1,25 +1,24 @@
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react"
 import Image from "next/image"
 
-import { FaqSection } from "@/components/home/faq"
-import { FooterContent } from "@/components/home/footer"
-import { HeroMotion } from "@/components/home/hero-motion"
-import { Marquee } from "@/components/home/marquee"
-import { Header } from "@/components/home/header"
 import {
   PLANTED_TREES,
   TREE_GOAL,
-  contactEmail,
   participationOptions,
 } from "@/components/home/content"
-import { StickyFooter } from "@/components/home/sticky-footer"
-import { UnderlineLink } from "@/components/home/underline-link"
+import { FaqSection } from "@/components/home/faq"
+import { HeroMotion } from "@/components/home/hero-motion"
+import { Marquee } from "@/components/home/marquee"
+import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/header"
 import {
   CountUp,
   Parallax,
   Reveal,
   RevealWords,
 } from "@/components/motion/reveals"
+import { UnderlineLink } from "@/components/motion/underline-link"
+import { contactEmail } from "@/lib/site"
 
 function participationLink(title: string) {
   return `mailto:${contactEmail}?subject=${encodeURIComponent(title)}`
@@ -459,9 +458,7 @@ export function HomePage({
           </section>
         </div>
       </main>
-      <StickyFooter>
-        <FooterContent />
-      </StickyFooter>
+      <Footer />
     </div>
   )
 }
