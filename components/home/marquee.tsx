@@ -1,9 +1,10 @@
 import { TextLoop } from "@/components/home/text-loop"
+import type { HomeDictionary } from "@/i18n/types"
 
-export function Marquee() {
+export function Marquee({ copy }: { copy: HomeDictionary["marquee"] }) {
   return (
-    <section aria-label="Konpal tagline" className="marquee-section">
-      <TextLoop text="greenToday, greenerTomorrow" />
+    <section aria-label={copy.ariaLabel} className="marquee-section">
+      <TextLoop text={copy.text} />
     </section>
   )
 }
