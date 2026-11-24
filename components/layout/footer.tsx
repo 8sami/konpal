@@ -23,20 +23,20 @@ export function Footer() {
         <div className="footer-bottom">
           <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
           <div className="footer-socials">
-            <Link
+            <a
               href="https://www.instagram.com/konpal.earth/"
               rel="noreferrer"
               target="_blank"
             >
               Instagram <ArrowUpRight aria-hidden="true" size={16} />
-            </Link>
-            <Link
+            </a>
+            <a
               href="https://www.linkedin.com/company/konpal/"
               rel="noreferrer"
               target="_blank"
             >
               LinkedIn <ArrowUpRight aria-hidden="true" size={16} />
-            </Link>
+            </a>
           </div>
           <span>© {new Date().getFullYear()} Konpal</span>
         </div>
