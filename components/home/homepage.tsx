@@ -1,5 +1,6 @@
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 import {
   PLANTED_TREES,
@@ -106,9 +107,9 @@ export function HomePage({
                 >
                   Fund a tree <ArrowUpRight aria-hidden="true" size={18} />
                 </a>
-                <a className="button-secondary" href="#purpose">
+                <Link className="button-secondary" href="#purpose">
                   Discover Konpal <ArrowDown aria-hidden="true" size={16} />
-                </a>
+                </Link>
               </div>
             </div>
             <Parallax>
