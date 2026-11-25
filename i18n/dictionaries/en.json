@@ -161,7 +161,8 @@
     },
     "marquee": {
       "ariaLabel": "Konpal tagline",
-      "text": "greenToday, greenerTomorrow"
+      "text": "greenToday, greenerTomorrow",
+      "separator": "✦"
     }
   }
 }
