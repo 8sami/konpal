@@ -1,5 +1,6 @@
 import { ArrowUpRight } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 import { contactEmail } from "@/lib/site"
 
@@ -8,7 +9,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="footer-inner container">
         <div className="footer-top">
-          <a aria-label="Konpal home" className="footer-wordmark" href="#top">
+          <Link aria-label="Konpal home" className="footer-wordmark" href="#top">
             <Image
               alt="Konpal"
               className="logo-mark logo-mark-light"
@@ -16,7 +17,7 @@ export function Footer() {
               src="/konpal-logo-white.png"
               width={256}
             />
-          </a>
+          </Link>
           <p>green today, greener tomorrow</p>
         </div>
         <div className="footer-bottom">

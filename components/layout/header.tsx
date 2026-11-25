@@ -42,14 +42,14 @@ export function Header({
 
   return (
     <>
-      <a className="skip-link" href="#main-content">
+      <Link className="skip-link" href="#main-content">
         Skip to content
-      </a>
+      </Link>
       <header className="site-header">
         <div className="header-inner container">
           <nav aria-label="Primary navigation" className="desktop-nav">
             {links.map((link) => (
-              <a className="nav-link" href={link.href} key={link.href}>
+              <Link className="nav-link" href={link.href} key={link.href}>
                 <span className="nav-link-label">{link.label}</span>
                 <svg
                   aria-hidden="true"
@@ -68,7 +68,7 @@ export function Header({
                     strokeWidth={10}
                   />
                 </svg>
-              </a>
+              </Link>
             ))}
           </nav>
           <Link aria-label="Konpal home" className="wordmark" href="#top">
@@ -111,7 +111,7 @@ export function Header({
       >
         <div className="mobile-navigation-links">
           {links.map((link, index) => (
-            <a
+            <Link
               href={link.href}
               key={link.href}
               onClick={() => setMenuOpen(false)}
@@ -121,7 +121,7 @@ export function Header({
               </span>
               {link.label}
               <ArrowUpRight aria-hidden="true" size={20} />
-            </a>
+            </Link>
           ))}
           <a
             className="mobile-contact"
