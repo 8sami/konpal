@@ -24,10 +24,10 @@ function wrap(value: number, length: number) {
 
 export function TextLoop({
   text,
-  separator = "✦",
+  separator,
 }: {
   text: string
-  separator?: string
+  separator: string
 }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const pathRef = useRef<SVGPathElement>(null)

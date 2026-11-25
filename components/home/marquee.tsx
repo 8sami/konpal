@@ -4,7 +4,7 @@ import type { HomeDictionary } from "@/i18n/types"
 export function Marquee({ copy }: { copy: HomeDictionary["marquee"] }) {
   return (
     <section aria-label={copy.ariaLabel} className="marquee-section">
-      <TextLoop text={copy.text} />
+      <TextLoop separator={copy.separator} text={copy.text} />
     </section>
   )
 }
