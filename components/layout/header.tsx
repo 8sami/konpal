@@ -5,7 +5,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
-import { UNDERLINE_PATH } from "./underline-link"
+import { UNDERLINE_PATH } from "@/components/motion/underline-link"
+import { contactEmail } from "@/lib/site"
 
 export function Header({
   labels,
@@ -87,7 +88,7 @@ export function Header({
               width={196}
             />
           </Link>
-          <a className="header-action" href="mailto:konpal.earth@gmail.com">
+          <a className="header-action" href={`mailto:${contactEmail}`}>
             Plant with us <ArrowUpRight aria-hidden="true" size={16} />
           </a>
           <button
@@ -124,7 +125,7 @@ export function Header({
           ))}
           <a
             className="mobile-contact"
-            href="mailto:konpal.earth@gmail.com"
+            href={`mailto:${contactEmail}`}
             onClick={() => setMenuOpen(false)}
           >
             Get in touch <ArrowUpRight aria-hidden="true" size={20} />
