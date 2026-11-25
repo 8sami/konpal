@@ -45,7 +45,7 @@ export async function generateMetadata({
           url: "/opengraph-image.png",
           width: 1200,
           height: 630,
-          alt: "Konpal green leaf wordmark on an ivory background",
+          alt: dictionary.metadata.openGraphImageAlt,
         },
       ],
     },

@@ -6,23 +6,27 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 
 import { UNDERLINE_PATH } from "@/components/motion/underline-link"
+import type {
+  CommonDictionary,
+  HeaderDictionary,
+  HomeDictionary,
+} from "@/i18n/types"
 import { contactEmail } from "@/lib/site"
 
 export function Header({
-  labels,
+  common,
+  copy,
+  navigation,
 }: {
-  labels: {
-    purpose: string
-    takePart: string
-    plantations: string
-    questions: string
-  }
+  common: CommonDictionary
+  copy: HeaderDictionary
+  navigation: HomeDictionary["navigation"]
 }) {
   const links = [
-    { label: labels.purpose, href: "#purpose" },
-    { label: labels.takePart, href: "#take-part" },
-    { label: labels.plantations, href: "#plantations" },
-    { label: labels.questions, href: "#questions" },
+    { label: navigation.purpose, href: "#purpose" },
+    { label: navigation.takePart, href: "#take-part" },
+    { label: navigation.plantations, href: "#plantations" },
+    { label: navigation.questions, href: "#questions" },
   ]
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -43,11 +47,11 @@ export function Header({
   return (
     <>
       <Link className="skip-link" href="#main-content">
-        Skip to content
+        {common.skipToContent}
       </Link>
       <header className="site-header">
         <div className="header-inner container">
-          <nav aria-label="Primary navigation" className="desktop-nav">
+          <nav aria-label={common.primaryNavigation} className="desktop-nav">
             {links.map((link) => (
               <Link className="nav-link" href={link.href} key={link.href}>
                 <span className="nav-link-label">{link.label}</span>
@@ -71,9 +75,9 @@ export function Header({
               </Link>
             ))}
           </nav>
-          <Link aria-label="Konpal home" className="wordmark" href="#top">
+          <Link aria-label={common.homeLabel} className="wordmark" href="#top">
             <Image
-              alt="Konpal"
+              alt={common.logoAlt}
               className="logo-mark logo-mark-dark"
               height={46}
               src="/konpal-logo.png"
@@ -89,12 +93,14 @@ export function Header({
             />
           </Link>
           <a className="header-action" href={`mailto:${contactEmail}`}>
-            Plant with us <ArrowUpRight aria-hidden="true" size={16} />
+            {copy.plantWithUs} <ArrowUpRight aria-hidden="true" size={16} />
           </a>
           <button
             aria-controls="mobile-navigation"
             aria-expanded={menuOpen}
-            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+            aria-label={
+              menuOpen ? common.closeNavigation : common.openNavigation
+            }
             className="menu-toggle"
             onClick={() => setMenuOpen((open) => !open)}
             type="button"
@@ -128,7 +134,7 @@ export function Header({
             href={`mailto:${contactEmail}`}
             onClick={() => setMenuOpen(false)}
           >
-            Get in touch <ArrowUpRight aria-hidden="true" size={20} />
+            {common.getInTouch} <ArrowUpRight aria-hidden="true" size={20} />
           </a>
         </div>
       </nav>

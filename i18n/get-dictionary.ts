@@ -1,14 +1,12 @@
-import "server-only";
+import "server-only"
 
-import type { Locale } from "./config";
-import englishDictionary from "./dictionaries/en.json";
-
-type Dictionary = typeof englishDictionary;
+import type { Locale } from "./config"
+import type { Dictionary } from "./types"
 
 const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
   en: () => import("./dictionaries/en.json").then((module) => module.default),
-};
+}
 
 export function getDictionary(locale: Locale) {
-  return dictionaries[locale]();
+  return dictionaries[locale]()
 }
