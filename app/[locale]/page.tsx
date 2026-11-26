@@ -17,13 +17,5 @@ export default async function Page({
 
   const dictionary = await getDictionary(locale)
 
-  return (
-    <HomePage
-      common={dictionary.common}
-      content={dictionary.home}
-      footer={dictionary.footer}
-      header={dictionary.header}
-      locale={locale}
-    />
-  )
+  return <HomePage dictionary={dictionary} locale={locale} />
 }
